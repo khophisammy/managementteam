@@ -48,7 +48,7 @@
   let backtotop = select('.back-to-top')
   if (backtotop) {
     const toggleBacktotop = () => {
-      if (window.scrollY > 1000) {
+      if (window.scrollY > 100) {
         backtotop.classList.add('active')
       } else {
         backtotop.classList.remove('active')
@@ -67,14 +67,14 @@
   const countDownDate = function() {
     let timeleft = new Date(countdown.getAttribute('data-count')).getTime() - new Date().getTime();
 
-    let days = Math.floor(timeleft / (10000 * 60 * 60 * 24));
-    let hours = Math.floor((timeleft % (10000 * 60 * 60 * 24)) / (10000 * 60 * 60));
-    let minutes = Math.floor((timeleft % (10000 * 60 * 60)) / (10000 * 60));
-    let seconds = Math.floor((timeleft % (10000 * 60)) / 1000);
+    let days = Math.floor(timeleft / (100000 * 60 * 60 * 24));
+    let hours = Math.floor((timeleft % (100000 * 60 * 60 * 24)) / (100000 * 60 * 60));
+    let minutes = Math.floor((timeleft % (100000 * 60 * 60)) / (10000 * 60));
+    let seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
 
     countdown.innerHTML = output.replace('%d', days).replace('%h', hours).replace('%m', minutes).replace('%s', seconds);
   }
   countDownDate();
-  setInterval(countDownDate, 10000);
+  setInterval(countDownDate, 1000);
 
 })()
