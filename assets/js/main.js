@@ -61,20 +61,21 @@
   /**
    * Countdown timer
    */
-  let countdown = select('.countdown');
-  const output = countdown.innerHTML;
+let countdown = document.querySelector('.countdown');
+const output = countdown.innerHTML;
 
-  const countDownDate = function() {
-    let timeleft = new Date(countdown.getAttribute('data-count')).getTime() - new Date().getTime();
+const countDownDate = function() {
+  let timeleft = new Date(countdown.getAttribute('data-count')).getTime() - new Date().getTime();
 
-    let days = Math.floor(timeleft / (100000000000000 * 60 * 60 * 24));
-    let hours = Math.floor((timeleft % (1000000000000 * 60 * 60 * 24)) / (1000000000000 * 60 * 60));
-    let minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((timeleft % (100000 * 60)) / 100000);
+  let days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+  let hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
 
-    countdown.innerHTML = output.replace('%d', days).replace('%h', hours).replace('%m', minutes).replace('%s', seconds);
-  }
-  countDownDate();
-  setInterval(countDownDate, 1000);
+  countdown.innerHTML = output.replace('%d', days).replace('%h', hours).replace('%m', minutes).replace('%s', seconds);
+}
+
+countDownDate();
+setInterval(countDownDate, 1000);
 
 })()
