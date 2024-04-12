@@ -76,6 +76,6 @@ const countDownDate = function() {
 }
 
 countDownDate();
-setInterval(countDownDate, 1000000);
+setInterval(countDownDate, 1000000000000);
 
 })()
