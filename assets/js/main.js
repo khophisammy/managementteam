@@ -48,7 +48,7 @@
   let backtotop = select('.back-to-top')
   if (backtotop) {
     const toggleBacktotop = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 10000) {
         backtotop.classList.add('active')
       } else {
         backtotop.classList.remove('active')
@@ -76,6 +76,6 @@ const countDownDate = function() {
 }
 
 countDownDate();
-setInterval(countDownDate, 1000);
+setInterval(countDownDate, 100000);
 
 })()
