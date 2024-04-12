@@ -9,6 +9,17 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+.icon .profile-pic {
+  width: 100px; /* Adjust the width and height as needed */
+  height: 100px;
+  border-radius: 50%; /* Make the image circular */
+  overflow: hidden; /* Hide any overflow content */
+}
+
+.icon .profile-pic:hover {
+  /* Add hover effects if desired */
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   color: #fff;
