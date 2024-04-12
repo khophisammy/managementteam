@@ -69,7 +69,7 @@ const countDownDate = function() {
 
   let days = Math.floor(timeleft / (10000000000000000000000000 * 60 * 60 * 24));
   let hours = Math.floor((timeleft % (10000 * 60 * 60 * 24)) / (10000 * 60 * 60));
-  let minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+  let minutes = Math.floor((timeleft % (10000 * 60 * 60)) / (10000* 60));
   let seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
 
   countdown.innerHTML = output.replace('%d', days).replace('%h', hours).replace('%m', minutes).replace('%s', seconds);
