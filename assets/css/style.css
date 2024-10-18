@@ -200,7 +200,7 @@ button {
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 100%;  /* Ensures the button takes the same width as the inputs */
+    width: 85%;  /* Ensures the button takes the same width as the inputs */
     box-sizing: border-box;  /* Makes sure padding is included in the width */
 }
 
