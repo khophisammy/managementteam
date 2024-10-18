@@ -25,13 +25,19 @@ body {
   position: relative;
 }
 
-/* Background image for mobile devices */
-@media (max-width: 767px) {
+/* Media query for mobile devices (small screens) */
+@media (max-width: 768px) {
+  /* Set background color to black for mobile */
   body {
-    background: url("../img/bg-mobile.jpg") top center no-repeat;
-    background-size: cover;
+    background-color: black;
+  }
+
+  /* You can also update specific section backgrounds if needed */
+  section {
+    background-color: black; /* Set black background for sections */
   }
 }
+
 
 
 body::before {  
