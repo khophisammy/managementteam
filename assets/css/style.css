@@ -186,12 +186,13 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
     transition: all 0.3s ease;
+    flex: 1;
 }
 
 button {
     display: block;
     margin: 20px auto 0 auto;  /* Centers the button horizontally */
-    padding: 10px 20px;
+    padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -199,6 +200,8 @@ button {
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    width: 100%;  /* Ensures the button takes the same width as the inputs */
+    box-sizing: border-box;  /* Makes sure padding is included in the width */
 }
 
 input:focus, button:hover {
