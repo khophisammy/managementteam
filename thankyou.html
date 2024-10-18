@@ -27,11 +27,47 @@
             from { transform: translateY(0); }
             to { transform: translateY(-10px); }
         }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 123, 255, 0.5);
+            border-radius: 50%;
+            animation: bubble 10s infinite;
+        }
+        @keyframes bubble {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+        .bubble:nth-child(odd) {
+            animation-duration: 8s;
+        }
+        .bubble:nth-child(even) {
+            animation-duration: 12s;
+        }
     </style>
 </head>
 <body>
     <div class="message">
-        THANKS FOR BOOKING YOUR SLOT!
+        <h4>THANKS FOR BOOKING YOUR SLOT!</h4>
     </div>
+    <script>
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.left = `${Math.random() * 100}vw`;
+            bubble.style.animationDelay = `${Math.random() * 2}s`;
+            document.body.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 12000);
+        }
+        setInterval(createBubble, 300);
+    </script>
 </body>
 </html>
