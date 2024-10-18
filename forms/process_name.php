@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $to = "ocanseysamuelkofi@gmail.com"; // Replace with your email address
     $subject = "New Name Submission";
     $message = "Name: " . $name;
-    $headers = "ocanseysamuel12@gmail.com"; // Replace with your sender email address
+    $headers = "ocanseysamuel18@gmail.com"; // Replace with your sender email address
 
     // Send email
     if (mail($to, $subject, $message, $headers)) {
