@@ -170,17 +170,34 @@ form {
 }
 
 label {
-    display: block;
+    display: inline-block;
     margin-top: 10px;
 }
 
-input, button {
-    display: block;
-    margin-top: 5px;
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+input {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+button {
+    display: block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: #fff;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
@@ -190,15 +207,10 @@ input:focus, button:hover {
     transform: scale(1.05);
 }
 
-button {
-    background-color: #007BFF;
-    color: #fff;
-    cursor: pointer;
-}
-
 button:active {
     background-color: #0056b3;
-    transform: scale(0.95
+    transform: scale(0.95);
+}
 #header .subscribe {
   font-size: 15px;
   text-align: center;
