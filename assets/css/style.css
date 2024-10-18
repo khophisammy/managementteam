@@ -16,13 +16,23 @@
   overflow: hidden; /* Hide any overflow content */  
 }
 
-body {  
-  font-family: "Open Sans", sans-serif;  
-  color: #fff;  
-  background: url("../img/bg.jpg") top center no-repeat;  
-  background-size: cover;  
-  position: relative;  
+/* Default background image for PC */
+body {
+  font-family: "Open Sans", sans-serif;
+  color: #fff;
+  background: url("../img/bg.jpg") top center no-repeat;
+  background-size: cover;
+  position: relative;
 }
+
+/* Background image for mobile devices */
+@media (max-width: 767px) {
+  body {
+    background: url("../img/bg-mobile.jpg") top center no-repeat;
+    background-size: cover;
+  }
+}
+
 
 body::before {  
   content: "";  
