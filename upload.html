@@ -99,8 +99,48 @@
 
         request.onsuccess = function (event) {
             db = event.target.result;
-            displayPhotos();
+            displayPhotos(); // Display photos after successful initialization
         };
 
-        request.onerror = function () {
-            console.error('IndexedDB initialization failed');
+        request.onerror = function (event) {
+            console.error('Database error:', event.target.error);
+        };
+    }
+
+    // Upload Photos
+    function uploadPhotos() {
+        const input = document.getElementById('photoInput');
+        const files = Array.from(input.files);
+
+        if (files.length === 0) {
+            alert('Please select at least one file to upload.');
+            return;
+        }
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const transaction = db.transaction(storeName, 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const addRequest = store.add(e.target.result);
+
+                addRequest.onsuccess = function () {
+                    displayPhotos(); // Refresh gallery after each upload
+                };
+
+                addRequest.onerror = function (event) {
+                    console.error('Error adding photo:', event.target.error);
+                };
+            };
+            reader.readAsDataURL(file); // Convert file to Base64
+        });
+    }
+
+    // Display Photos
+    function displayPhotos() {
+        const gallery = document.getElementById('photoGallery');
+        gallery.innerHTML = ''; // Clear existing gallery items
+
+        const transaction = db.transaction(storeName, 'readonly');
+        const store = transaction.objectStore(storeName);
+        const request = store.getAll
