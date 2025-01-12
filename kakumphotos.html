@@ -10,39 +10,53 @@
     <div id="photoGallery"></div>
 
     <script>
-        const BOT_TOKEN = "7923708092:AAFEJOduWSvLbVTId-nJZdyCRIF2qiazDPk";
+        const BOT_TOKEN = "7923708092:AAFEJOduWSvLbVTId-nJZdyCRIF2qiazDPk"; // Replace with your bot token
+        const CHAT_ID = "7343573675"; // Replace with your chat ID
 
         async function fetchPhotos() {
-            // Fetch updates from Telegram bot
-            const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
-            const data = await response.json();
+            try {
+                // Fetch updates from Telegram
+                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
+                const data = await response.json();
 
-            const gallery = document.getElementById("photoGallery");
-
-            data.result.forEach((update) => {
-                if (update.message && update.message.photo) {
-                    const photoArray = update.message.photo;
-                    const fileId = photoArray[photoArray.length - 1].file_id;
-
-                    // Fetch the file URL
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`)
-                        .then((res) => res.json())
-                        .then((fileData) => {
-                            const filePath = fileData.result.file_path;
-                            const photoUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
-
-                            // Display the photo
-                            const img = document.createElement("img");
-                            img.src = photoUrl;
-                            img.alt = "Uploaded Photo";
-                            img.style.width = "200px";
-                            img.style.margin = "10px";
-                            gallery.appendChild(img);
-                        });
+                if (!data.result || data.result.length === 0) {
+                    document.getElementById("photoGallery").innerText = "No photos available.";
+                    return;
                 }
-            });
+
+                const gallery = document.getElementById("photoGallery");
+                gallery.innerHTML = ""; // Clear any existing content
+
+                data.result.forEach((update) => {
+                    if (update.message && update.message.photo) {
+                        const photoArray = update.message.photo;
+                        const fileId = photoArray[photoArray.length - 1].file_id; // Largest photo size
+
+                        // Fetch the file URL for the photo
+                        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`)
+                            .then((res) => res.json())
+                            .then((fileData) => {
+                                const filePath = fileData.result.file_path;
+                                const photoUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
+
+                                // Create an image element and add it to the gallery
+                                const img = document.createElement("img");
+                                img.src = photoUrl;
+                                img.alt = "Uploaded Photo";
+                                img.style.width = "200px";
+                                img.style.margin = "10px";
+                                gallery.appendChild(img);
+                            })
+                            .catch((err) => console.error("Error fetching file path:", err));
+                    }
+                });
+            } catch (err) {
+                console.error("Error fetching updates:", err);
+                document.getElementById("photoGallery").innerText = "Failed to load photos.";
+            }
         }
 
+        // Fetch photos when the page loads
         fetchPhotos();
     </script>
 </body>
