@@ -73,7 +73,7 @@
 <header>
     <h1>My Photo Gallery</h1>
 </header>
-
+<!--
 <div class="gallery">
     <!-- Photo 1 -->
     <div class="gallery-item">
@@ -108,79 +108,26 @@
     </div>
 
     <!-- Add more photos here... -->
+    -->
 
 </div>
 <script>
-   document.addEventListener('DOMContentLoaded', function () {
-    const gallery = document.querySelector('.gallery');
-    const dbName = "PhotoGallery";
-    const storeName = "photos";
-
-    // Open IndexedDB
-    const request = indexedDB.open(dbName, 1);
-
-    request.onupgradeneeded = function (event) {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains(storeName)) {
-            db.createObjectStore(storeName, { autoIncrement: true });
-        }
-    };
-
-    request.onsuccess = function (event) {
-        const db = event.target.result;
-
-        // Load photos from IndexedDB
-        const transaction = db.transaction(storeName, "readonly");
-        const store = transaction.objectStore(storeName);
-        const getRequest = store.getAll();
-
-        getRequest.onsuccess = function () {
-            const photos = getRequest.result;
-            photos.forEach(photo => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
-                galleryItem.innerHTML = `
-                    <img src="${photo}" alt="Uploaded Photo">
-                    <div class="overlay">
-                        <div class="overlay-text">Uploaded Photo</div>
-                    </div>
-                `;
-                gallery.appendChild(galleryItem);
-            });
-        };
-
-        // Upload photos
-        document.getElementById('photoInput').addEventListener('change', function (event) {
-            const files = Array.from(event.target.files);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const transaction = db.transaction(storeName, "readwrite");
-                    const store = transaction.objectStore(storeName);
-                    store.add(e.target.result);
-
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = 'gallery-item';
-                    galleryItem.innerHTML = `
-                        <img src="${e.target.result}" alt="Uploaded Photo">
-                        <div class="overlay">
-                            <div class="overlay-text">Uploaded Photo</div>
-                        </div>
-                    `;
-                    gallery.appendChild(galleryItem);
-                };
-                reader.readAsDataURL(file);
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+        const gallery = document.querySelector('.gallery');
+        const photos = JSON.parse(localStorage.getItem('photos')) || [];
+        photos.forEach(photo => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = 
+                <img src="${photo}" alt="Uploaded Photo">
+                <div class="overlay">
+                    <div class="overlay-text">Uploaded Photo</div>
+                </div>
+            ;
+            gallery.appendChild(galleryItem);
         });
-    };
-
-    request.onerror = function () {
-        console.error("Could not open IndexedDB");
-    };
-});
-
+    });
 </script>
 
 </body>
 </html>
-
