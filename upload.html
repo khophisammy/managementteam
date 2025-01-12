@@ -82,65 +82,57 @@
 </div>
 
 <script>
-    const dbName = 'PhotoGalleryDB';
-    const storeName = 'photos';
-    let db;
+    // Load photos from localStorage on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        displayPhotos();
+    });
 
-    // Initialize IndexedDB
-    function initDB() {
-        const request = indexedDB.open(dbName, 1);
-
-        request.onupgradeneeded = function (event) {
-            db = event.target.result;
-            if (!db.objectStoreNames.contains(storeName)) {
-                db.createObjectStore(storeName, { autoIncrement: true });
-            }
-        };
-
-        request.onsuccess = function (event) {
-            db = event.target.result;
-            displayPhotos(); // Display photos after successful initialization
-        };
-
-        request.onerror = function (event) {
-            console.error('Database error:', event.target.error);
-        };
-    }
-
-    // Upload Photos
     function uploadPhotos() {
         const input = document.getElementById('photoInput');
         const files = Array.from(input.files);
-
-        if (files.length === 0) {
-            alert('Please select at least one file to upload.');
-            return;
-        }
+        const photos = JSON.parse(localStorage.getItem('photos')) || [];
 
         files.forEach(file => {
             const reader = new FileReader();
-            reader.onload = function (e) {
-                const transaction = db.transaction(storeName, 'readwrite');
-                const store = transaction.objectStore(storeName);
-                const addRequest = store.add(e.target.result);
-
-                addRequest.onsuccess = function () {
-                    displayPhotos(); // Refresh gallery after each upload
-                };
-
-                addRequest.onerror = function (event) {
-                    console.error('Error adding photo:', event.target.error);
-                };
+            reader.onload = function(e) {
+                photos.push(e.target.result);
+                localStorage.setItem('photos', JSON.stringify(photos));
+                displayPhotos();
             };
-            reader.readAsDataURL(file); // Convert file to Base64
+            reader.readAsDataURL(file);
         });
     }
 
-    // Display Photos
     function displayPhotos() {
         const gallery = document.getElementById('photoGallery');
-        gallery.innerHTML = ''; // Clear existing gallery items
+        gallery.innerHTML = '';
 
-        const transaction = db.transaction(storeName, 'readonly');
-        const store = transaction.objectStore(storeName);
-        const request = store.getAll
+        const photos = JSON.parse(localStorage.getItem('photos')) || [];
+        photos.forEach((photo, index) => {
+            const photoItem = document.createElement('div');
+            photoItem.classList.add('photo-item');
+
+            const img = document.createElement('img');
+            img.src = photo;
+            img.alt = 'Uploaded Photo';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'X';
+            deleteButton.onclick = () => deletePhoto(index);
+
+            photoItem.appendChild(img);
+            photoItem.appendChild(deleteButton);
+            gallery.appendChild(photoItem);
+        });
+    }
+
+    function deletePhoto(index) {
+        const photos = JSON.parse(localStorage.getItem('photos')) || [];
+        photos.splice(index, 1);
+        localStorage.setItem('photos', JSON.stringify(photos));
+        displayPhotos();
+    }
+</script>
+
+</body>
+</html>
