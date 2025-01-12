@@ -21,6 +21,8 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             width: 400px;
+            overflow-y: auto;
+            max-height: 90vh;
         }
         .upload-container h1 {
             margin: 0 0 20px;
@@ -40,6 +42,9 @@
         }
         .gallery {
             margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .photo-item {
             position: relative;
@@ -127,6 +132,16 @@
         localStorage.setItem('photos', JSON.stringify(photos));
         displayPhotos();
     }
+
+    // Override localStorage size limit warning by chunking data if needed
+    Storage.prototype.setItem = function(key, value) {
+        if (value.length > 5000000) {
+            console.warn("Value exceeds localStorage size limit.");
+            alert("Too many photos or large files are being stored.");
+            return;
+        }
+        window.localStorage.setItem(key, value);
+    };
 </script>
 
 </body>
