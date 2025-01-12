@@ -110,6 +110,23 @@
     <!-- Add more photos here... -->
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const gallery = document.querySelector('.gallery');
+        const photos = JSON.parse(localStorage.getItem('photos')) || [];
+        photos.forEach(photo => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = `
+                <img src="${photo}" alt="Uploaded Photo">
+                <div class="overlay">
+                    <div class="overlay-text">Uploaded Photo</div>
+                </div>
+            `;
+            gallery.appendChild(galleryItem);
+        });
+    });
+</script>
 
 </body>
 </html>
