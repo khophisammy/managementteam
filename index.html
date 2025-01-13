@@ -249,20 +249,68 @@ Welcome to our community management team! We are a passionate group dedicated to
 </head>
 
     <section class="contact-form">
-        <h2>CONTACT US</h2>
-        <form action="mailto:ocanseysamuelkofi@gmail.com" method="post" enctype="text/plain">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-            
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="4" required></textarea>
-            
-            <button type="submit">Submit</button>
-        </form>
-    </section>
+    <h2>CONTACT US</h2>
+    <form id="contactForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+        
+        <button type="submit">Submit</button>
+    </form>
+</section>
+
+<script>
+    const botToken = '7575827425:AAGEpUusB11LF0kN_TCXuoSRv7CIMaA7SzI';
+    const chatId = '7343573675';
+
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Get form data
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        // Prepare the message to send
+        const telegramMessage = `
+📬 New Contact Form Submission:
+- 🧑‍💼 Name: ${name}
+- 📧 Email: ${email}
+- 📝 Message: ${message}
+        `;
+
+        // Send the message via Telegram Bot API
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: telegramMessage,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                alert('Your message has been sent successfully!');
+            } else {
+                alert('Failed to send message. Please try again later.');
+                console.error(data);
+            }
+        })
+        .catch(error => {
+            alert('An error occurred while sending the message.');
+            console.error(error);
+        });
+    });
+</script>
+
 
     <head>
     
