@@ -1,60 +1,54 @@
-<!-- kakumphotos.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kakum Photos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: white;
-            text-align: center;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
         }
         h1 {
-            margin-top: 20px;
+            color: #ff4500;
         }
-        .photo-gallery {
+        .gallery {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
         }
-        .photo {
+        .gallery img {
+            max-width: 200px;
             margin: 10px;
-            border: 2px solid white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .photo img {
-            width: 200px;
-            height: 150px;
-            object-fit: cover;
+            border: 2px solid #333;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Kakum Photos</h1>
-    <div class="photo-gallery" id="photoGallery"></div>
-
+    <div class="container">
+        <h1>Kakum Photos</h1>
+        <div class="gallery" id="kakumGallery"></div>
+    </div>
     <script>
         function loadPhotos() {
-            const gallery = document.getElementById('photoGallery');
-            const photos = JSON.parse(localStorage.getItem('photos')) || [];
-            gallery.innerHTML = '';
-            photos.forEach((photo, index) => {
-                const photoDiv = document.createElement('div');
-                photoDiv.className = 'photo';
-                photoDiv.innerHTML = `<img src="${photo}" alt="Photo ${index + 1}">`;
-                gallery.appendChild(photoDiv);
+            const storedImages = JSON.parse(localStorage.getItem('photos')) || [];
+            const kakumGallery = document.getElementById('kakumGallery');
+            kakumGallery.innerHTML = '';
+            storedImages.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                kakumGallery.appendChild(img);
             });
         }
 
-        window.onload = loadPhotos;
+        window.addEventListener('photosUpdated', loadPhotos);
+        window.addEventListener('load', loadPhotos);
     </script>
 </body>
 </html>
