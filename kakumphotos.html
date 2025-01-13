@@ -7,49 +7,52 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f0f8ff;
             margin: 0;
             padding: 20px;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        h1 {
+            text-align: center;
+            color: #333;
         }
-        .photo-list {
+        #gallery {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            justify-content: center;
         }
-        .photo-list img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
+        .photo {
+            margin: 10px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .photo img {
+            max-width: 200px;
+            max-height: 200px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Kakum Photos</h1>
-        <div class="photo-list" id="photoList"></div>
-    </div>
-    <script>
-        function updatePhotoList() {
-            const photoList = document.getElementById('photoList');
-            photoList.innerHTML = '';
-            const storedPhotos = JSON.parse(localStorage.getItem('photos') || '[]');
-            for (let photoURL of storedPhotos) {
-                const photoItem = document.createElement('div');
-                const img = document.createElement('img');
-                img.src = photoURL;
-                photoItem.appendChild(img);
-                photoList.appendChild(photoItem);
-            }
-        }
+    <h1>Kakum Photos</h1>
+    <div id="gallery"></div>
 
-        window.onload = updatePhotoList;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gallery = document.getElementById('gallery');
+            const photos = JSON.parse(localStorage.getItem('photos')) || [];
+
+            photos.forEach(photo => {
+                const photoDiv = document.createElement('div');
+                photoDiv.classList.add('photo');
+                
+                const img = document.createElement('img');
+                img.src = photo;
+                img.alt = 'Uploaded photo';
+                
+                photoDiv.appendChild(img);
+                gallery.appendChild(photoDiv);
+            });
+        });
     </script>
 </body>
 </html>
