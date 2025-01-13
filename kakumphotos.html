@@ -4,54 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kakum Photos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .photo-grid img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        .photo-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .photo-list img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
-    <div class="container py-5">
-        <h1 class="text-center mb-4">Kakum Photo Gallery</h1>
-        <div id="photoGallery" class="photo-grid">
-            <!-- Images will dynamically appear here -->
-        </div>
+    <div class="container">
+        <h1>Kakum Photos</h1>
+        <div class="photo-list" id="photoList"></div>
     </div>
     <script>
-        // Fetch and display uploaded photos dynamically
-        const photoGallery = document.getElementById('photoGallery');
-
-        function loadPhotos() {
-            fetch('uploadedPhotos.json') // Assume uploaded photos metadata is stored in JSON
-                .then(response => response.json())
-                .then(data => {
-                    photoGallery.innerHTML = '';
-                    data.photos.forEach(photo => {
-                        const img = document.createElement('img');
-                        img.src = photo.url;
-                        img.alt = photo.name;
-                        photoGallery.appendChild(img);
-                    });
-                })
-                .catch(error => console.error('Error loading photos:', error));
+        function updatePhotoList() {
+            const photoList = document.getElementById('photoList');
+            photoList.innerHTML = '';
+            const storedPhotos = JSON.parse(localStorage.getItem('photos') || '[]');
+            for (let photoURL of storedPhotos) {
+                const photoItem = document.createElement('div');
+                const img = document.createElement('img');
+                img.src = photoURL;
+                photoItem.appendChild(img);
+                photoList.appendChild(photoItem);
+            }
         }
 
-        // Initial load
-        loadPhotos();
-        // Reload photos every 5 seconds
-        setInterval(loadPhotos, 5000);
+        window.onload = updatePhotoList;
     </script>
 </body>
 </html>
