@@ -7,97 +7,113 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #fff7e6;
+            background: linear-gradient(to right, #f12711, #f5af19);
+            color: white;
+            text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
         h1 {
-            text-align: center;
-            color: #333;
+            margin-top: 20px;
         }
-        #uploadForm {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .upload-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        #preview {
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .preview {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             margin-top: 20px;
         }
-        .thumbnail {
-            margin: 10px;
-            border: 2px solid #333;
-            border-radius: 8px;
-            overflow: hidden;
+        .preview .photo {
             position: relative;
+            margin: 10px;
         }
-        .thumbnail img {
-            max-width: 100px;
-            max-height: 100px;
+        .preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid white;
+            border-radius: 10px;
         }
-        .thumbnail button {
+        .preview button {
             position: absolute;
-            top: 0;
-            right: 0;
-            background-color: red;
+            top: 5px;
+            right: 5px;
+            background: red;
             color: white;
             border: none;
+            border-radius: 5px;
+            padding: 5px;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>Upload Photos</h1>
-    <div id="uploadForm">
-        <input type="file" id="fileInput" accept="image/*" multiple>
+    <div class="upload-container">
+        <input type="file" id="photoInput" multiple accept="image/*">
+        <div class="preview" id="preview"></div>
     </div>
-    <div id="preview"></div>
 
     <script>
-        const fileInput = document.getElementById('fileInput');
+        const photoInput = document.getElementById('photoInput');
         const preview = document.getElementById('preview');
 
-        fileInput.addEventListener('change', () => {
-            const files = fileInput.files;
+        function updateLocalStorage(photos) {
+            localStorage.setItem('photos', JSON.stringify(photos));
+        }
+
+        function loadPreview() {
+            const photos = JSON.parse(localStorage.getItem('photos')) || [];
+            preview.innerHTML = '';
+            photos.forEach((photo, index) => {
+                const photoDiv = document.createElement('div');
+                photoDiv.className = 'photo';
+                photoDiv.innerHTML = `
+                    <img src="${photo}" alt="Photo ${index + 1}">
+                    <button onclick="deletePhoto(${index})">X</button>
+                `;
+                preview.appendChild(photoDiv);
+            });
+        }
+
+        function deletePhoto(index) {
+            const photos = JSON.parse(localStorage.getItem('photos')) || [];
+            photos.splice(index, 1);
+            updateLocalStorage(photos);
+            loadPreview();
+        }
+
+        photoInput.addEventListener('change', () => {
+            const files = Array.from(photoInput.files);
             const photos = JSON.parse(localStorage.getItem('photos')) || [];
 
-            Array.from(files).forEach(file => {
+            files.forEach(file => {
                 const reader = new FileReader();
-                
-                reader.onload = (event) => {
-                    const photo = event.target.result;
-                    photos.push(photo);
-
-                    const thumbnail = document.createElement('div');
-                    thumbnail.classList.add('thumbnail');
-                    
-                    const img = document.createElement('img');
-                    img.src = photo;
-                    img.alt = 'Uploaded photo';
-                    
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'X';
-                    deleteButton.addEventListener('click', () => {
-                        const index = photos.indexOf(photo);
-                        if (index > -1) {
-                            photos.splice(index, 1);
-                            localStorage.setItem('photos', JSON.stringify(photos));
-                            thumbnail.remove();
-                        }
-                    });
-
-                    thumbnail.appendChild(img);
-                    thumbnail.appendChild(deleteButton);
-                    preview.appendChild(thumbnail);
+                reader.onload = () => {
+                    photos.push(reader.result);
+                    updateLocalStorage(photos);
+                    loadPreview();
                 };
-
                 reader.readAsDataURL(file);
             });
 
-            localStorage.setItem('photos', JSON.stringify(photos));
+            photoInput.value = '';
         });
+
+        window.onload = loadPreview;
     </script>
 </body>
 </html>
