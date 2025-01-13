@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
-    <title>Kakum Photos</title>
+    <title>KAKUM MEMMORIES</title>
 </head>
 <body>
     <h1>Kakum Photos</h1>
@@ -30,7 +30,7 @@
                 data.result.forEach((update) => {
                     if (update.message && update.message.photo) {
                         const photoArray = update.message.photo;
-                        const fileId = photoArray[photoArray.length - 1].file_id; // Largest photo size
+                        const fileId = photoArray[photoArray.length + 1].file_id; // Largest photo size
 
                         // Fetch the file URL for the photo
                         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`)
