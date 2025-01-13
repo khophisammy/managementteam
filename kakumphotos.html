@@ -1,3 +1,4 @@
+<!-- kakumphotos.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,52 +8,53 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
         h1 {
-            text-align: center;
-            color: #333;
+            margin-top: 20px;
         }
-        #gallery {
+        .photo-gallery {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            padding: 20px;
         }
         .photo {
             margin: 10px;
-            border: 2px solid #333;
-            border-radius: 8px;
+            border: 2px solid white;
+            border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .photo img {
-            max-width: 200px;
-            max-height: 200px;
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
     <h1>Kakum Photos</h1>
-    <div id="gallery"></div>
+    <div class="photo-gallery" id="photoGallery"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const gallery = document.getElementById('gallery');
+        function loadPhotos() {
+            const gallery = document.getElementById('photoGallery');
             const photos = JSON.parse(localStorage.getItem('photos')) || [];
-
-            photos.forEach(photo => {
+            gallery.innerHTML = '';
+            photos.forEach((photo, index) => {
                 const photoDiv = document.createElement('div');
-                photoDiv.classList.add('photo');
-                
-                const img = document.createElement('img');
-                img.src = photo;
-                img.alt = 'Uploaded photo';
-                
-                photoDiv.appendChild(img);
+                photoDiv.className = 'photo';
+                photoDiv.innerHTML = `<img src="${photo}" alt="Photo ${index + 1}">`;
                 gallery.appendChild(photoDiv);
             });
-        });
+        }
+
+        window.onload = loadPhotos;
     </script>
 </body>
 </html>
