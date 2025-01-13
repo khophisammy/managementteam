@@ -2,11 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.9">
-    <title>KAKUM MEMMORIES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAKUM MEMORIES</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        #photoGallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        #photoGallery img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            margin: 10px;
+            border: 2px solid white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <h1>KAKUM MEMMORIES<</h1>
+    <h1>KAKUM MEMORIES</h1>
     <div id="photoGallery"></div>
 
     <script>
@@ -43,8 +71,6 @@
                                 const img = document.createElement("img");
                                 img.src = photoUrl;
                                 img.alt = "Uploaded Photo";
-                                img.style.width = "200px";
-                                img.style.margin = "10px";
                                 gallery.appendChild(img);
                             })
                             .catch((err) => console.error("Error fetching file path:", err));
