@@ -4,52 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Photos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #e9ecef;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
-        .upload-container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 30px;
+        .container {
+            max-width: 600px;
+            margin: auto;
             background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .upload-container h1 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+        .photo-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .photo-list img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .photo-list button {
+            display: block;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="upload-container">
-        <h1 class="text-center">Upload Your Photos</h1>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="photo" class="form-label">Choose Photo</label>
-                <input type="file" class="form-control" id="photo" name="photo" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Upload</button>
-        </form>
+    <div class="container">
+        <h1>Upload Photos</h1>
+        <input type="file" id="photoInput" multiple>
+        <div class="photo-list" id="photoList"></div>
     </div>
-
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
+        document.getElementById('photoInput').addEventListener('change', handleFileSelect);
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            const photoList = document.getElementById('photoList');
+            photoList.innerHTML = '';
+            const storedPhotos = JSON.parse(localStorage.getItem('photos') || '[]');
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const photoURL = e.target.result;
+                    const photoItem = document.createElement('div');
+                    const img = document.createElement('img');
+                    img.src = photoURL;
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', () => {
+                        storedPhotos.splice(storedPhotos.indexOf(photoURL), 1);
+                        localStorage.setItem('photos', JSON.stringify(storedPhotos));
+                        updatePhotoList();
+                    });
+                    photoItem.appendChild(img);
+                    photoItem.appendChild(deleteButton);
+                    photoList.appendChild(photoItem);
+                    storedPhotos.push(photoURL);
+                };
+                reader.readAsDataURL(file);
+            }
+            localStorage.setItem('photos', JSON.stringify(storedPhotos));
+        }
 
-            fetch('uploadHandler.php', { // Assume a server-side handler for uploads
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(result => {
-                    alert(result.message);
-                })
-                .catch(error => console.error('Error uploading photo:', error));
-        });
+        function updatePhotoList() {
+            const photoList = document.getElementById('photoList');
+            photoList.innerHTML = '';
+            const storedPhotos = JSON.parse(localStorage.getItem('photos') || '[]');
+            for (let photoURL of storedPhotos) {
+                const photoItem = document.createElement('div');
+                const img = document.createElement('img');
+                img.src = photoURL;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => {
+                    storedPhotos.splice(storedPhotos.indexOf(photoURL), 1);
+                    localStorage.setItem('photos', JSON.stringify(storedPhotos));
+                    updatePhotoList();
+                });
+                photoItem.appendChild(img);
+                photoItem.appendChild(deleteButton);
+                photoList.appendChild(photoItem);
+            }
+        }
+
+        window.onload = updatePhotoList;
     </script>
 </body>
 </html>
